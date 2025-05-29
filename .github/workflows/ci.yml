@@ -15,20 +15,16 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Build Docker Image for Test
-      run: docker build -t myapp-test .
+      run: docker build -t docmara/myapp-test .
 
     - name: Run Pytest in Docker
-      run: docker run --rm myapp-test
+      run: docker run --rm docmara/myapp-test
 
     - name: Login to DockerHub
       if: success()
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Tag Docker Image
-      if: success()
-      run: docker tag myapp-test ${{ secrets.DOCKER_USERNAME }}/myapp-test:latest
-
     - name: Push Docker Image to DockerHub
       if: success()
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp-test:latest
+      run: docker push docmara/myapp-test
 
